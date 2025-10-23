@@ -7,3 +7,6 @@
 *.a
 
 build/
+
+task.md
+.txt
