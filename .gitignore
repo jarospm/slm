@@ -9,4 +9,4 @@
 build/
 
 task.md
-.txt
+*.txt
