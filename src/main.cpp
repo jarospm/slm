@@ -6,7 +6,7 @@
 
 using namespace std;
 
-// Print k-gram frequencies (computed by summing transition counts)
+// HELPER: Print k-gram frequencies (computed by summing transition counts)
 void print_kgram_frequencies(const map<string, map<char, int>>& kgrams) {
     cout << "\n=== K-GRAM FREQUENCIES ===" << endl;
     for (auto& kgram_pair : kgrams) {
@@ -18,7 +18,7 @@ void print_kgram_frequencies(const map<string, map<char, int>>& kgrams) {
     }
 }
 
-// Print character transitions for each k-gram
+// HELPER: Print character transitions for each k-gram
 void print_character_transitions(const map<string, map<char, int>>& kgrams) {
     cout << "\n=== CHARACTER TRANSITIONS ===" << endl;
     for (auto& kgram_pair : kgrams) {
@@ -37,11 +37,42 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    int k = stoi(argv[1]);
-    int gen_length = stoi(argv[3]);
+    // Validate k (must be >= 1)
+    int k;
+    try {
+        k = stoi(argv[1]);
+    } catch (const invalid_argument& e) {
+        cerr << "Error: k must be a valid integer" << endl;
+        return 1;
+    }
     
+    if (k < 1) {
+        cerr << "Error: k must be >= 1" << endl;
+        return 1;
+    }
+
+    // Validate generation_length (must be >= 0)
+    int gen_length;
+    try {
+        gen_length = stoi(argv[3]);
+    } catch (const invalid_argument& e) {
+        cerr << "Error: generation_length must be a valid integer" << endl;
+        return 1;
+    }
+    
+    if (gen_length < 0) {
+        cerr << "Error: generation_length must be >= 0" << endl;
+        return 1;
+    }
+    
+    // Validate file can be opened
     ifstream file;
     file.open(argv[2]);
+    
+    if (!file.is_open()) {
+        cerr << "Error: could not open file '" << argv[2] << "'" << endl;
+        return 1;
+    }
 
     string line;
     string input;
