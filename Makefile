@@ -1,16 +1,17 @@
 CXX = g++
-CXXFLAGS = -std=c++11 -Wall
-TARGET = kgram
-OBJS = main.o kgram.o
+CXXFLAGS = -Wall -std=c++17
+TARGET = slm
+SRCDIR = src
+OBJS = main.o training.o
 
 $(TARGET): $(OBJS)
 	$(CXX) -o $(TARGET) $(OBJS)
 
-main.o: main.cpp kgram.hpp
-	$(CXX) $(CXXFLAGS) -c main.cpp
+main.o: $(SRCDIR)/main.cpp $(SRCDIR)/training.hpp
+	$(CXX) $(CXXFLAGS) -c $(SRCDIR)/main.cpp
 
-kgram.o: kgram.cpp kgram.hpp
-	$(CXX) $(CXXFLAGS) -c kgram.cpp
+training.o: $(SRCDIR)/training.cpp $(SRCDIR)/training.hpp
+	$(CXX) $(CXXFLAGS) -c $(SRCDIR)/training.cpp
 
 clean:
 	rm -f $(OBJS) $(TARGET)

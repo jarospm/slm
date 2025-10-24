@@ -1,4 +1,4 @@
-#include "kgram.hpp"
+#include "training.hpp"
 
 using namespace std;
 

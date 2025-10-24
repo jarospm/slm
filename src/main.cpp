@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
 #include <fstream>
-#include "kgram.hpp"
+#include "training.hpp"
 
 using namespace std;
 
