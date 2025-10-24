@@ -5,13 +5,17 @@
 
 using namespace std;
 
-// NOTES / TODO:
-// "bba" actually appeared twice, but we only captured it once...
-// because the second occurrence was at the end.
+// REFLECT LATER... do we actually need a separate map for k-gram frequencies? 
+// The only reason is to count the k-grams at the end of the text... 
+// but those should not be relevant for text generation, so why bother? 
 
-
-map<string, map<char, int>> map_kgrams(string input, int k) {
-    map<string, map<char, int>> kgrams;
+// Training phase: Extract k-gram statistics from input text
+// Returns a pair containing:
+//   1. K-gram frequencies: map<string, int> - counts how many times each k-gram appears
+//   2. Character transitions: map<string, map<char, int>> - for each k-gram, counts which characters follow it
+pair<map<string, int>, map<string, map<char, int>>> map_kgrams(string input, int k) {
+    map<string, int> kgram_counts;           // Track k-gram frequencies
+    map<string, map<char, int>> transitions;  // Track character transitions
     
     // Loop through the input text
     // Stop at input.length() - k because we need k characters for a k-gram
@@ -19,12 +23,15 @@ map<string, map<char, int>> map_kgrams(string input, int k) {
         // Extract the k-gram at position i
         string kgram = input.substr(i, k);
         
+        // Always count the k-gram occurrence
+        kgram_counts[kgram]++;
+        
         // Check if there's a next character
         if (i + k < input.length()) {
             char next_char = input[i + k];
             
             // Increment the count for this k-gram -> character transition
-            kgrams[kgram][next_char]++;
+            transitions[kgram][next_char]++;
             
             cout << "Position " << i << ": k-gram '" << kgram 
                  << "' -> next char '" << next_char << "'" << endl;
@@ -34,7 +41,7 @@ map<string, map<char, int>> map_kgrams(string input, int k) {
         }
     }
     
-    return kgrams;
+    return make_pair(kgram_counts, transitions);
 }
 
 int main(int argc, char* argv[]) {
@@ -53,20 +60,26 @@ int main(int argc, char* argv[]) {
 
     file.close();
 
-    auto kgrams = map_kgrams(input, k);
+    auto result = map_kgrams(input, k);
+    auto kgram_counts = result.first;
+    auto transitions = result.second;
     
-    // Print out the results
-    cout << "\n=== RESULTS ===" << endl;
-    for (auto& kgram_pair : kgrams) {
-        // kgram_pair is: pair<string, map<char, int>>
-        cout << "K-gram '" << kgram_pair.first << "':" << endl;
+    // Print k-gram frequencies
+    cout << "\n=== K-GRAM FREQUENCIES ===" << endl;
+    for (auto& count_pair : kgram_counts) {
+        cout << "K-gram '" << count_pair.first << "': " << count_pair.second << endl;
+    }
+    
+    // Print transition probabilities
+    cout << "\n=== CHARACTER TRANSITIONS ===" << endl;
+    for (auto& trans_pair : transitions) {
+        cout << "K-gram '" << trans_pair.first << "':" << endl;
 
-        for (auto& char_pair : kgram_pair.second) {
-            // char_pair is: pair<char, int>
+        for (auto& char_pair : trans_pair.second) {
             cout << "  -> '" << char_pair.first << "': " << char_pair.second << endl;
         }
 
-        if (kgram_pair.second.empty()) {
+        if (trans_pair.second.empty()) {
             cout << "  (no transitions - end of text)" << endl;
         }
     }

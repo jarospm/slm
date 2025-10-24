@@ -1,12 +1,4 @@
 .DS_Store
 
-*.o
-*.out
-*.exe
-*.so
-*.a
-
-build/
-
 task.md
 *.txt
