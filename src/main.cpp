@@ -32,7 +32,7 @@ void print_character_transitions(const map<string, map<char, int>>& kgrams) {
 
 int main(int argc, char* argv[]) {
     // Usage: ./slm <k> <input_file> <generation_length>
-    if (argc < 4) {
+    if (argc != 4) {
         cerr << "Usage: " << argv[0] << " <k> <input_file> <generation_length>" << endl;
         return 1;
     }
@@ -65,6 +65,12 @@ int main(int argc, char* argv[]) {
         return 1;
     }
     
+    // Validate k <= gen_length (generation starts with k-gram, then adds more characters)
+    if (k > gen_length) {
+        cerr << "Error: k cannot exceed generation_length" << endl;
+        return 1;
+    }
+
     // Validate file can be opened
     ifstream file;
     file.open(argv[2]);
@@ -82,6 +88,13 @@ int main(int argc, char* argv[]) {
     }
 
     file.close();
+
+    // Validate input has enough characters for k-grams
+    if (input.length() <= k) {
+        cerr << "Error: input text must have more than k characters (input length: " 
+            << input.length() << ", k: " << k << ")" << endl;
+        return 1;
+    }
 
     // Training phase
     auto kgrams = map_kgrams(input, k);
