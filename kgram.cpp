@@ -7,6 +7,9 @@ using namespace std;
 //   1. They cannot generate text (no next character to sample)
 //   2. They aren't natural starting points for generation
 //
+// When reading from files, spaces are added after each line (in main.cpp),
+// which means line-ending k-grams transition to spaces rather than being dropped.
+//
 // K-gram frequency n(w) is computed by summing its character transition counts
 
 map<string, map<char, int>> map_kgrams(string input, int k) {
