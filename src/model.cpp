@@ -1,4 +1,4 @@
-#include "training.hpp"
+#include "model.hpp"
 
 using namespace std;
 
@@ -12,9 +12,11 @@ using namespace std;
 //
 // K-gram frequency n(w) is computed by summing its character transition counts
 
-map<string, map<char, int>> map_kgrams(string input, int k) {
-    map<string, map<char, int>> kgrams;
-    
+Model::Model(int k) : k(k) {
+    // Initialize empty k-grams map
+}
+
+void Model::train(const string& input) {
     // Loop through the input text, stopping before the last k characters
     for (int i = 0; i < input.length() - k; i++) {
         // Extract the k-gram at position i
@@ -24,6 +26,13 @@ map<string, map<char, int>> map_kgrams(string input, int k) {
         // Track this k-gram -> character transition
         kgrams[kgram][next_char]++;
     }
-    
+}
+
+const map<string, map<char, int>>& Model::get_kgrams() const {
     return kgrams;
 }
+
+int Model::get_k() const {
+    return k;
+}
+
