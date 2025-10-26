@@ -2,7 +2,7 @@
 #include <string>
 #include <fstream>
 #include "model.hpp"
-#include "generation.hpp"
+#include "textgen.hpp"
 
 using namespace std;
 
@@ -96,17 +96,17 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    // Training phase
-    Model model(k);
-    model.train(input);
+    // Train model
+    Model model(k, input);
     
-    print_kgram_frequencies(model.get_kgrams());
-    print_character_transitions(model.get_kgrams());
-    cout << "\n=== GENERATED TEXT ===" << endl;
+    // print_kgram_frequencies(model.get_kgrams());
+    // print_character_transitions(model.get_kgrams());
+    // cout << "\n=== GENERATED TEXT ===" << endl;
 
-    // Generation phase
-    string generated = generate_text(model.get_kgrams(), gen_length);
-    cout << generated << endl;
+    // Generate text
+    Generator generator(model);
+    string generated_text = generator.generate(gen_length);
+    cout << generated_text << endl;
 
 }
 

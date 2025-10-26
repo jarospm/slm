@@ -3,6 +3,8 @@
 
 #include <string>
 #include <map>
+#include <vector>
+#include <random>
 
 // Model class encapsulates k-gram statistics and training
 class Model {
@@ -11,18 +13,24 @@ private:
     //   - Outer map: k-gram -> character distribution
     //   - Inner map: character -> count of how many times it follows the k-gram
     std::map<std::string, std::map<char, int>> kgrams;
-    int k;
+    
+    // Derived sampling data (computed after training)
+    std::vector<std::string> kgram_list_;
+    std::vector<int> kgram_weights_;
 
 public:
-    // Constructor: initialize model with k-gram size
-    Model(int k);
+    // Constructor: initialize and train model with k-gram size and input text
+    Model(int k, const std::string& input);
     
-    // Training: Extract k-gram character transition statistics from input text
-    void train(const std::string& input);
+    // Sampling interface
+    const std::vector<std::string>& get_kgram_list() const;
+    const std::vector<int>& get_kgram_weights() const;
+    std::string sample_random_kgram(std::mt19937& gen) const;
+    char sample_next_char(const std::string& kgram, std::mt19937& gen) const;
+    bool has_kgram(const std::string& kgram) const;
     
-    // Getters for model data
+    // Inspection interface
     const std::map<std::string, std::map<char, int>>& get_kgrams() const;
-    int get_k() const;
 };
 
 #endif
