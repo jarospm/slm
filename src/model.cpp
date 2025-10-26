@@ -1,4 +1,5 @@
 #include "model.hpp"
+#include <iostream>
 
 using namespace std;
 
@@ -6,9 +7,6 @@ using namespace std;
 // K-grams at the end of text are ignored because:
 //   1. They cannot generate text (no next character to sample)
 //   2. They aren't natural starting points for generation
-//
-// When reading from files, spaces are added after each line (in main.cpp),
-// which means line-ending k-grams transition to spaces rather than being dropped.
 //
 // K-gram frequency n(w) is computed by summing its character transition counts
 
@@ -71,5 +69,27 @@ bool Model::has_kgram(const string& kgram) const {
 
 const map<string, map<char, int>>& Model::get_kgrams() const {
     return kgrams;
+}
+
+void Model::print_kgram_frequencies() const {
+    cout << "\n=== K-GRAM FREQUENCIES ===" << endl;
+    for (const auto& kgram_pair : kgrams) {
+        int total = 0;
+        for (const auto& char_pair : kgram_pair.second) {
+            total += char_pair.second;
+        }
+        cout << "K-gram '" << kgram_pair.first << "': " << total << endl;
+    }
+}
+
+void Model::print_character_transitions() const {
+    cout << "\n=== CHARACTER TRANSITIONS ===" << endl;
+    for (const auto& kgram_pair : kgrams) {
+        cout << "K-gram '" << kgram_pair.first << "':" << endl;
+        
+        for (const auto& char_pair : kgram_pair.second) {
+            cout << "  -> '" << char_pair.first << "': " << char_pair.second << endl;
+        }
+    }
 }
 

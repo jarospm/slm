@@ -29,8 +29,10 @@ public:
     char sample_next_char(const std::string& kgram, std::mt19937& gen) const;
     bool has_kgram(const std::string& kgram) const;
     
-    // Inspection interface
+    // Debug utilities
     const std::map<std::string, std::map<char, int>>& get_kgrams() const;
+    void print_kgram_frequencies() const;
+    void print_character_transitions() const;
 };
 
 #endif

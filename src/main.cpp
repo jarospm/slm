@@ -6,30 +6,6 @@
 
 using namespace std;
 
-// HELPER: Print k-gram frequencies (computed by summing transition counts)
-void print_kgram_frequencies(const map<string, map<char, int>>& kgrams) {
-    cout << "\n=== K-GRAM FREQUENCIES ===" << endl;
-    for (auto& kgram_pair : kgrams) {
-        int total = 0;
-        for (auto& char_pair : kgram_pair.second) {
-            total += char_pair.second;
-        }
-        cout << "K-gram '" << kgram_pair.first << "': " << total << endl;
-    }
-}
-
-// HELPER: Print character transitions for each k-gram
-void print_character_transitions(const map<string, map<char, int>>& kgrams) {
-    cout << "\n=== CHARACTER TRANSITIONS ===" << endl;
-    for (auto& kgram_pair : kgrams) {
-        cout << "K-gram '" << kgram_pair.first << "':" << endl;
-
-        for (auto& char_pair : kgram_pair.second) {
-            cout << "  -> '" << char_pair.first << "': " << char_pair.second << endl;
-        }
-    }
-}
-
 int main(int argc, char* argv[]) {
     // Usage: ./slm <k> <input_file> <generation_length>
     if (argc != 4) {
@@ -98,10 +74,6 @@ int main(int argc, char* argv[]) {
 
     // Train model
     Model model(k, input);
-    
-    // print_kgram_frequencies(model.get_kgrams());
-    // print_character_transitions(model.get_kgrams());
-    // cout << "\n=== GENERATED TEXT ===" << endl;
 
     // Generate text
     Generator generator(model);
