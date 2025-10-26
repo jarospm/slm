@@ -84,7 +84,7 @@ int main(int argc, char* argv[]) {
     string input;
 
     while (getline(file, line)) {
-        input += line + " ";
+        input += line;
     }
 
     file.close();

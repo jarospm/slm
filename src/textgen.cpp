@@ -29,8 +29,7 @@ string Generator::generate(int length) {
         
         // If new k-gram doesn't exist in model...
         if (!model_.has_kgram(current_kgram)) {
-            // add space and pick a new random kgram
-            output += " ";
+            // pick a new random kgram
             current_kgram = model_.sample_random_kgram(gen_);
             
             // Check how many characters we can still add
